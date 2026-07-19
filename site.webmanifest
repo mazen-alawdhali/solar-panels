@@ -1,6 +1,6 @@
 {
-  "name": "حاسبة الألواح الشمسية",
-  "short_name": "Solar Panels",
+  "name": "حاسبة الألواح الشمسية ",
+  "short_name": "حاسبة الألواح ",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
