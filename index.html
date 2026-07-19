@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حاسبة الألواح الشمسية</title>
     
+    <!-- إعدادات PWA والأيقونات -->
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#1e3a8a">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+    
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -117,7 +125,7 @@
         .custom-select-display:active { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.3); }
         
         /* كلاسات التوسيط المثالي للنص داخل القائمة */
-        .select-spacer { width: 16px; } /* مسافة وهمية لمعادلة حجم السهم */
+        .select-spacer { width: 16px; } 
         .select-text { flex: 1; text-align: center; }
         .select-arrow { width: 16px; text-align: center; font-size: 10px; color: #94a3b8; }
 
@@ -278,6 +286,7 @@
         </footer>
     </div>
 
+    <!-- كود الجافاسكربت الخاص بحسابات التطبيق -->
     <script>
         const SYSTEM_EFFICIENCY = 0.85;
         
@@ -423,6 +432,21 @@
         document.getElementById('sunHoursInput').addEventListener('input', calculate);
 
         applyLanguage();
+    </script>
+    
+    <!-- كود تسجيل Service Worker لعمل التطبيق Offline -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('SW Registered successfully:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('SW Registration failed:', error);
+                    });
+            });
+        }
     </script>
 </body>
 </html>

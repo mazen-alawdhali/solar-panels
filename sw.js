@@ -1,61 +1,58 @@
-const CACHE_NAME = 'solar-calc-v8-cache'; // تم تغيير الإصدار لـ v8 لإجبار المتصفح على التحديث
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/site.webmanifest',
-  '/favicon.ico',
-  '/favicon.svg',
-  '/favicon-96x96.png',
-  '/apple-touch-icon.png',
-  '/web-app-manifest-192x192.png', // تمت إضافتها من المجلد لتعمل أوفلاين
-  '/web-app-manifest-512x512.png'  // تمت إضافتها من المجلد لتعمل أوفلاين
+const CACHE_NAME = 'solar-calc-v1';
+const ASSETS_TO_CACHE = [
+    '/',
+    '/index.html',
+    '/site.webmanifest',
+    '/favicon.ico',
+    '/favicon.svg',
+    '/favicon-96x96.png',
+    '/apple-touch-icon.png',
+    '/web-app-manifest-192x192.png',
+    '/web-app-manifest-512x512.png'
 ];
 
-// تنصيب التطبيق وتخزين الملفات في ذاكرة الجوال
-self.addEventListener('install', event => {
-  self.skipWaiting(); // إجبار المتصفح على تفعيل النسخة الجديدة فوراً دون انتظار
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('تم حفظ الملفات للعمل أوفلاين بنجاح');
-        return cache.addAll(urlsToCache);
-      })
-  );
-});
-
-// تفعيل السيرفيس وركر ومسح الكاش القديم تلقائياً
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('تم مسح الكاش القديم:', cacheName);
-            return caches.delete(cacheName); // حذف الإصدارات القديمة
-          }
+// حدث التثبيت (Caching)
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(ASSETS_TO_CACHE);
         })
-      );
-    }).then(() => self.clients.claim()) // السيطرة المباشرة على كل النوافذ المفتوحة للتطبيق
-  );
+    );
+    self.skipWaiting();
 });
 
-// اعتراض الطلبات: استراتيجية "الإنترنت أولاً ثم الكاش" (Network First)
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        // إذا كان هناك اتصال بالإنترنت، قم بتحديث الكاش بالنسخة الأحدث لضمان استمرار التحديثات
-        if (response && response.status === 200 && response.type === 'basic') {
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, responseToCache);
-          });
-        }
-        return response;
-      })
-      .catch(() => {
-        // في حال انقطاع الإنترنت، قم بجلب النسخة من الكاش الموثوق
-        return caches.match(event.request);
-      })
-  );
+// حدث التفعيل (تنظيف الكاش القديم عند التحديث)
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cacheName) => {
+                    if (cacheName !== CACHE_NAME) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
+    );
+    self.clients.claim();
+});
+
+// حدث الجلب (Stale-While-Revalidate) - ممتاز للتحديثات التلقائية
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        caches.match(event.request).then((cachedResponse) => {
+            const fetchPromise = fetch(event.request).then((networkResponse) => {
+                // تحديث الكاش بالنسخة الجديدة في الخلفية
+                caches.open(CACHE_NAME).then((cache) => {
+                    cache.put(event.request, networkResponse.clone());
+                });
+                return networkResponse;
+            }).catch(() => {
+                // في حال انقطاع النت، نتجاهل الخطأ لأننا سنعرض النسخة المخبأة
+            });
+            
+            // عرض النسخة المخبأة فوراً إن وجدت، وإلا جلبها من النت
+            return cachedResponse || fetchPromise;
+        })
+    );
 });
