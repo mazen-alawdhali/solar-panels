@@ -210,14 +210,15 @@
                     <div class="custom-select-wrapper">
                         <div class="custom-select-display" onclick="toggleDropdown('unitDropdown')">
                             <span class="select-spacer"></span>
-                            <span id="unitDisplay" class="select-text" data-i18n="kwh">كيلوواط (kWh)</span>
+                            <span id="unitDisplay" class="select-text" data-i18n="wh">واط (Wh)</span>
                             <span class="select-arrow">▼</span>
                         </div>
                         <div class="custom-select-options" id="unitDropdown">
                             <div class="custom-option" onclick="selectUnit('kwh')" data-i18n="kwh">كيلوواط (kWh)</div>
+                            <div class="custom-option" onclick="selectUnit('wh')" data-i18n="wh">واط (Wh)</div>
                             <div class="custom-option" onclick="selectUnit('ah')" data-i18n="ah">أمبير (Ah)</div>
                         </div>
-                        <input type="hidden" id="unitValue" value="kwh">
+                        <input type="hidden" id="unitValue" value="wh">
                     </div>
                 </div>
                 
@@ -263,6 +264,26 @@
                 </div>
             </div>
 
+            <!-- الصف الرابع: المنطقة الجغرافية (نسبة الكفاءة) -->
+            <div class="flex-row">
+                <div class="input-group" id="efficiencyGroup">
+                    <label data-i18n="regionEfficiency">منطقة الاستخدام (نسبة الكفاءة):</label>
+                    <div class="custom-select-wrapper">
+                        <div class="custom-select-display" onclick="toggleDropdown('efficiencyDropdown')">
+                            <span class="select-spacer"></span>
+                            <span id="efficiencyDisplay" class="select-text" data-i18n="regionSanaa">مناطق معتدلة مثل صنعاء (85%)</span>
+                            <span class="select-arrow">▼</span>
+                        </div>
+                        <div class="custom-select-options" id="efficiencyDropdown">
+                            <div class="custom-option" onclick="selectEfficiency('0.85', 'regionSanaa')" data-i18n="regionSanaa">مناطق معتدلة مثل صنعاء (85%)</div>
+                            <div class="custom-option" onclick="selectEfficiency('0.75', 'regionAden')" data-i18n="regionAden">مناطق حارة مثل عدن (75%)</div>
+                        </div>
+                        <input type="hidden" id="efficiencyValue" value="0.85">
+                        <input type="hidden" id="efficiencyKey" value="regionSanaa">
+                    </div>
+                </div>
+            </div>
+
             <div class="result-box">
                 <div class="result-label" data-i18n="resultLabel">عدد الألواح المطلوبة للشحن</div>
                 <div class="result-number">
@@ -288,15 +309,14 @@
 
     <!-- كود الجافاسكربت الخاص بحسابات التطبيق -->
     <script>
-        const SYSTEM_EFFICIENCY = 0.85;
-        
         const dict = {
             ar: {
                 appTitle: "حاسبة الألواح الشمسية ⚡", 
                 batteryCapacity: "سعة البطارية الواحدة:", batteryCount: "عدد البطاريات:",
-                unitLabel: "وحدة القياس:", kwh: "كيلوواط (kWh)", ah: "أمبير (Ah)", 
+                unitLabel: "وحدة القياس:", kwh: "كيلوواط (kWh)", wh: "واط (Wh)", ah: "أمبير (Ah)", 
                 sysVoltage: "جهد المنظومة (V):", v12: "12 فولت", v24: "24 فولت", v48: "48 فولت", 
                 panelPower: "قدرة اللوح الواحد (W):", sunHours: "ساعات ذروة الشمس:", 
+                regionEfficiency: "منطقة الاستخدام (نسبة الكفاءة):", regionSanaa: "مناطق معتدلة مثل صنعاء (85%)", regionAden: "مناطق حارة مثل عدن (75%)",
                 resultLabel: "عدد الألواح المطلوبة للشحن", panelsWord: "ألواح", 
                 totalPowerPre: "إجمالي القدرة المطلوبة:", wattWord: "واط",
                 resetBtn: "⚠️ تصفير البيانات", devBy: "تصميم وتطوير"
@@ -304,9 +324,10 @@
             en: {
                 appTitle: "Solar Panels Calculator ⚡", 
                 batteryCapacity: "Single Battery Capacity:", batteryCount: "Number of Batteries:",
-                unitLabel: "Measurement Unit:", kwh: "Kilowatts (kWh)", ah: "Amperes (Ah)", 
+                unitLabel: "Measurement Unit:", kwh: "Kilowatts (kWh)", wh: "Watts (Wh)", ah: "Amperes (Ah)", 
                 sysVoltage: "System Voltage (V):", v12: "12 Volts", v24: "24 Volts", v48: "48 Volts", 
                 panelPower: "Single Panel Power (W):", sunHours: "Peak Sun Hours:", 
+                regionEfficiency: "Geographic Region (Efficiency):", regionSanaa: "Mild Regions e.g. Sanaa (85%)", regionAden: "Hot Regions e.g. Aden (75%)",
                 resultLabel: "Required Panels for Charging", panelsWord: "Panels", 
                 totalPowerPre: "Total Required Power:", wattWord: "Watts",
                 resetBtn: "⚠️ Reset Data", devBy: "Designed & Developed by"
@@ -334,8 +355,11 @@
 
             const unitVal = document.getElementById('unitValue').value;
             const voltVal = document.getElementById('voltageValue').value;
+            const effKey = document.getElementById('efficiencyKey').value;
+            
             document.getElementById('unitDisplay').innerText = t[unitVal];
             document.getElementById('voltDisplay').innerText = t["v" + voltVal];
+            document.getElementById('efficiencyDisplay').innerText = t[effKey];
             
             calculate();
         }
@@ -386,6 +410,16 @@
             calculate();
         }
 
+        function selectEfficiency(val, key) {
+            const t = dict[currentLang];
+            document.getElementById('efficiencyValue').value = val;
+            document.getElementById('efficiencyKey').value = key;
+            document.getElementById('efficiencyDisplay').innerText = t[key];
+            document.getElementById('efficiencyDropdown').classList.remove('show');
+            document.getElementById('efficiencyDropdown').closest('.custom-select-wrapper').style.zIndex = '1';
+            calculate();
+        }
+
         document.addEventListener('focusin', function(e) {
             if (e.target && e.target.tagName === 'INPUT' && e.target.type === 'number') {
                 e.target.select();
@@ -400,9 +434,12 @@
             let sunHours = parseFloat(document.getElementById('sunHoursInput').value) || 0;
             let unit = document.getElementById('unitValue').value;
             let voltage = parseFloat(document.getElementById('voltageValue').value) || 48;
+            let systemEfficiency = parseFloat(document.getElementById('efficiencyValue').value) || 0.85;
 
-            let totalEnergyWh = (unit === 'kwh') ? (singleCapacity * 1000 * battCount) : (singleCapacity * voltage * battCount);
-            let neededWh = totalEnergyWh / SYSTEM_EFFICIENCY;
+            let totalEnergyWh = (unit === 'kwh') ? (singleCapacity * 1000 * battCount) : 
+                                (unit === 'wh') ? (singleCapacity * battCount) : 
+                                (singleCapacity * voltage * battCount);
+            let neededWh = totalEnergyWh / systemEfficiency;
             
             let totalPanelPower = (sunHours > 0) ? (neededWh / sunHours) : 0;
             let numberOfPanels = (panelWatts > 0) ? Math.ceil(totalPanelPower / panelWatts) : 0;
@@ -421,8 +458,9 @@
             document.getElementById('batteryCountInput').value = 0;
             document.getElementById('panelInput').value = 0;
             document.getElementById('sunHoursInput').value = 0;
-            selectUnit('kwh');
+            selectUnit('wh');
             selectVoltage('48');
+            selectEfficiency('0.85', 'regionSanaa');
             calculate();
         }
 
@@ -450,4 +488,3 @@
     </script>
 </body>
 </html>
-
