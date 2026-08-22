@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حاسبة الألواح الشمسية</title>
     
+    <!-- إعدادات SEO لمحركات البحث -->
+    <meta name="description" content="حاسبة الألواح الشمسية الاحترافية لحساب عدد الألواح المطلوبة لشحن بطاريات الليثيوم والجل بناءً على سعة البطارية، ساعات ذروة الشمس، وكفاءة المنطقة الجغرافية.">
+    <meta name="keywords" content="حاسبة طاقة شمسية, عدد الألواح الشمسية, طاقة شمسية اليمن, حساب البطاريات والألواح, بطاريات ليثيوم, طاقة متجددة, Solar Panels Calculator">
+    <meta name="author" content="مازن العوذلي">
+    
     <!-- إعدادات PWA والأيقونات -->
     <link rel="manifest" href="site.webmanifest">
     <meta name="theme-color" content="#1e3a8a">
@@ -24,6 +29,10 @@
             justify-content: center; 
             padding: 16px 12px; 
             transition: all 0.3s ease;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         .container { 
             background-color: #1e293b; 
@@ -79,6 +88,7 @@
             backdrop-filter: blur(5px); 
         }
         .title-box h1 { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.4); color: #ffffff; }
+        .title-box p.subtitle { margin: 8px 0 0; font-size: 12.5px; color: #bae6fd; font-weight: 600; text-align: center; }
 
         .content { padding: 0 20px 20px; }
 
@@ -104,7 +114,7 @@
         input:hover { border-color: #38bdf8; background-color: #1e293b; box-shadow: 0 0 8px rgba(56, 189, 248, 0.2); }
         input:focus { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.3); background-color: #0f172a; }
 
-        /* تنسيقات القوائم المنسدلة الاحترافية وتوسيط النص */
+        /* تنسيقات القوائم المنسدلة */
         .custom-select-wrapper { position: relative; width: 100%; user-select: none; z-index: 1; }
         .custom-select-display { 
             height: 42px; 
@@ -124,7 +134,6 @@
         .custom-select-display:hover { border-color: #38bdf8; background-color: #1e293b; box-shadow: 0 0 8px rgba(56, 189, 248, 0.2); }
         .custom-select-display:active { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.3); }
         
-        /* كلاسات التوسيط المثالي للنص داخل القائمة */
         .select-spacer { width: 16px; } 
         .select-text { flex: 1; text-align: center; }
         .select-arrow { width: 16px; text-align: center; font-size: 10px; color: #94a3b8; }
@@ -189,6 +198,33 @@
         .whatsapp { background-color: #25D366; }
         .facebook { background-color: #1877F2; }
         .social-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+        /* تنسيقات نافذة التأكيد (المودال) */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(5px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; opacity: 0; pointer-events: none; transition: 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-box {
+            background: #1e293b; border: 1px solid #334155; border-radius: 20px;
+            padding: 24px; width: 90%; max-width: 320px; text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            transform: translateY(-20px) scale(0.95); transition: 0.3s ease;
+        }
+        .modal-overlay.active .modal-box { transform: translateY(0) scale(1); }
+        .modal-box h3 { margin: 0 0 12px; color: #f8fafc; font-size: 18px; font-weight: 800; }
+        .modal-box p { margin: 0 0 24px; color: #94a3b8; font-size: 13.5px; line-height: 1.6; }
+        .modal-actions { display: flex; gap: 12px; justify-content: center; }
+        .modal-actions button {
+            flex: 1; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px;
+            cursor: pointer; border: none; transition: 0.2s;
+        }
+        .btn-cancel { background: #334155; color: #f8fafc; }
+        .btn-cancel:hover { background: #475569; }
+        .btn-confirm { background: #dc2626; color: white; }
+        .btn-confirm:hover { background: #b91c1c; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3); }
     </style>
 </head>
 <body>
@@ -199,6 +235,7 @@
         <div class="header">
             <div class="title-box">
                 <h1 data-i18n="appTitle">حاسبة الألواح الشمسية ⚡</h1>
+                <p class="subtitle" data-i18n="appSubtitle">حساب دقيق لعدد الألواح المطلوبة لشحن البطاريات</p>
             </div>
         </div>
 
@@ -293,13 +330,13 @@
                 <div class="result-details" id="detailsOutput">إجمالي القدرة المطلوبة: 0 واط</div>
             </div>
 
-            <button class="btn-reset" onclick="resetData()">
-                <span data-i18n="resetBtn">⚠️ تصفير البيانات</span>
+            <button class="btn-reset" onclick="openModal()">
+                <span data-i18n="resetBtn">⚠️ حذف البيانات</span>
             </button>
         </div>
 
         <footer class="solar-footer">
-            <p class="copyright-text"><span data-i18n="devBy">تصميم وتطوير</span> <span class="author-name">مازن العوذلي</span> &copy; 2026</p>
+            <p class="copyright-text"><span data-i18n="devBy">تصميم وتطوير</span> <span id="authorName" class="author-name">مازن العوذلي</span> &copy; 2026</p>
             <div class="social-links">
                 <a href="https://wa.me/message/BSOAV5RVXBNQP1" target="_blank" class="social-btn whatsapp"><svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.966C16.528 1.975 14.067 1.053 12 1.053c-5.438 0-9.864 4.373-9.868 9.803-.001 1.714.453 3.39 1.317 4.873L2.43 21.48l5.857-1.534zM16.71 14.65c-.259-.13-1.534-.759-1.773-.846-.239-.087-.413-.13-.587.13-.174.26-.674.846-.826 1.018-.152.173-.304.195-.563.065-.259-.13-1.096-.404-2.088-1.292-.771-.69-1.292-1.542-1.444-1.802-.152-.26-.016-.4.114-.53.117-.117.259-.304.39-.455.13-.152.174-.26.26-.433.087-.173.043-.325-.022-.455-.065-.13-.587-1.413-.804-1.944-.213-.518-.447-.448-.607-.456-.157-.008-.337-.01-.517-.01-.18 0-.474.067-.72.337-.247.271-.943.924-.943 2.255s.967 2.61 1.101 2.784c.134.173 1.902 2.904 4.609 4.07.644.277 1.148.443 1.541.568.647.206 1.236.177 1.701.108.519-.077 1.534-.627 1.751-1.234.217-.607.217-1.127.152-1.234-.064-.108-.239-.173-.499-.303z"/></svg></a>
                 <a href="https://www.facebook.com/share/1YF9n8KTFK/" target="_blank" class="social-btn facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
@@ -307,11 +344,47 @@
         </footer>
     </div>
 
+    <!-- نافذة تأكيد الحذف (المودال) -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 data-i18n="modalTitle">تأكيد حذف البيانات</h3>
+            <p data-i18n="modalDesc">هل أنت متأكد أنك تريد حذف جميع المدخلات وإعادتها للوضع الافتراضي؟</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()" data-i18n="cancelBtn">إلغاء</button>
+                <button class="btn-confirm" onclick="executeReset()" data-i18n="confirmBtn">تأكيد الحذف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- كود حماية التطبيق والأمان -->
+    <script>
+        // قفل النطاق Domain Lock
+        const allowedHosts = ['solar-panels-pro.vercel.app', 'localhost', '127.0.0.1', ''];
+        if (!allowedHosts.includes(window.location.hostname)) {
+            document.body.innerHTML = '<div style="color:#ef4444; text-align:center; padding:50px 20px; font-family:sans-serif; background-color:#0f172a; height:100vh;"><h2>⚠️ غير مصرح بتشغيل التطبيق على هذا النطاق</h2></div>';
+        }
+
+        // حظر القائمة اليمنى لمنع فحص العناصر
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // حظر أدوات المطورين واختصارات لوحة المفاتيح
+        document.addEventListener('keydown', e => {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && ['I', 'i', 'J', 'j', 'C', 'c'].includes(e.key)) ||
+                (e.ctrlKey && ['U', 'u', 'S', 's'].includes(e.key))
+            ) {
+                e.preventDefault();
+            }
+        });
+    </script>
+
     <!-- كود الجافاسكربت الخاص بحسابات التطبيق -->
     <script>
         const dict = {
             ar: {
                 appTitle: "حاسبة الألواح الشمسية ⚡", 
+                appSubtitle: "حساب دقيق لعدد الألواح المطلوبة لشحن البطاريات",
                 batteryCapacity: "سعة البطارية الواحدة:", batteryCount: "عدد البطاريات:",
                 unitLabel: "وحدة القياس:", kwh: "كيلوواط (kWh)", wh: "واط (Wh)", ah: "أمبير (Ah)", 
                 sysVoltage: "جهد المنظومة (V):", v12: "12 فولت", v24: "24 فولت", v48: "48 فولت", 
@@ -319,10 +392,14 @@
                 regionEfficiency: "منطقة الاستخدام (نسبة الكفاءة):", regionSanaa: "مناطق معتدلة (85%)", regionAden: "مناطق حارة (75%)",
                 resultLabel: "عدد الألواح المطلوبة للشحن", panelsWord: "ألواح", 
                 totalPowerPre: "إجمالي القدرة المطلوبة:", wattWord: "واط",
-                resetBtn: "⚠️ تصفير البيانات", devBy: "تصميم وتطوير"
+                resetBtn: "⚠️ حذف البيانات", devBy: "تصميم وتطوير",
+                authorName: "مازن العوذلي",
+                modalTitle: "تأكيد حذف البيانات", modalDesc: "هل أنت متأكد أنك تريد حذف جميع المدخلات وإعادتها للوضع الافتراضي؟",
+                cancelBtn: "إلغاء", confirmBtn: "تأكيد الحذف"
             },
             en: {
                 appTitle: "Solar Panels Calculator ⚡", 
+                appSubtitle: "Accurate calculation for required battery charging panels",
                 batteryCapacity: "Single Battery Capacity:", batteryCount: "Number of Batteries:",
                 unitLabel: "Measurement Unit:", kwh: "Kilowatts (kWh)", wh: "Watts (Wh)", ah: "Amperes (Ah)", 
                 sysVoltage: "System Voltage (V):", v12: "12 Volts", v24: "24 Volts", v48: "48 Volts", 
@@ -330,7 +407,10 @@
                 regionEfficiency: "Geographic Region (Efficiency):", regionSanaa: "Mild Regions (85%)", regionAden: "Hot Regions (75%)",
                 resultLabel: "Required Panels for Charging", panelsWord: "Panels", 
                 totalPowerPre: "Total Required Power:", wattWord: "Watts",
-                resetBtn: "⚠️ Reset Data", devBy: "Designed & Developed by"
+                resetBtn: "⚠️ Delete Data", devBy: "Designed & Developed by",
+                authorName: "Mazen Alawdhali",
+                modalTitle: "Confirm Deletion", modalDesc: "Are you sure you want to delete all inputs and return to default?",
+                cancelBtn: "Cancel", confirmBtn: "Confirm Deletion"
             }
         };
 
@@ -361,7 +441,37 @@
             document.getElementById('voltDisplay').innerText = t["v" + voltVal];
             document.getElementById('efficiencyDisplay').innerText = t[effKey];
             
+            // تحديث اسم المطور حسب اللغة
+            document.getElementById('authorName').innerText = t['authorName'];
+            
             calculate();
+        }
+
+        // --- دوال نافذة التأكيد (المودال) ---
+        function openModal() { document.getElementById('confirmModal').classList.add('active'); }
+        function closeModal() { document.getElementById('confirmModal').classList.remove('active'); }
+        
+        function executeReset() {
+            document.getElementById('capacityInput').value = 0;
+            document.getElementById('batteryCountInput').value = 0;
+            document.getElementById('panelInput').value = 0;
+            document.getElementById('sunHoursInput').value = 0;
+            document.getElementById('unitValue').value = 'wh';
+            document.getElementById('voltageValue').value = '48';
+            document.getElementById('efficiencyValue').value = '0.85';
+            document.getElementById('efficiencyKey').value = 'regionSanaa';
+            
+            // تحديث العرض للقوائم المنسدلة بناءً على القيم الافتراضية
+            const t = dict[currentLang];
+            document.getElementById('unitDisplay').innerText = t['wh'];
+            document.getElementById('voltDisplay').innerText = t['v48'];
+            document.getElementById('efficiencyDisplay').innerText = t['regionSanaa'];
+            
+            const voltGroup = document.getElementById('voltageGroup');
+            voltGroup.classList.add('hidden'); // الواط هو الافتراضي، نخفي الفولت
+
+            calculate();
+            closeModal();
         }
 
         function toggleDropdown(id) {
@@ -392,12 +502,9 @@
             document.getElementById('unitDropdown').closest('.custom-select-wrapper').style.zIndex = '1';
             
             const voltGroup = document.getElementById('voltageGroup');
+            if (val === 'ah') voltGroup.classList.remove('hidden');
+            else voltGroup.classList.add('hidden');
             
-            if (val === 'ah') {
-                voltGroup.classList.remove('hidden');
-            } else {
-                voltGroup.classList.add('hidden');
-            }
             calculate();
         }
 
@@ -426,11 +533,61 @@
             }
         });
 
+        // تنظيف ومنع إدخال الكسور لعدد البطاريات
+        document.getElementById('batteryCountInput').addEventListener('input', function() {
+            if (this.value.includes('.')) this.value = Math.floor(parseFloat(this.value)) || 0;
+            calculate();
+        });
+
+        // تنظيف ومنع إدخال الكسور لقدرة اللوح وتوحيد الحماية
+        document.getElementById('panelInput').addEventListener('input', function() {
+            if (this.value.includes('.')) this.value = Math.floor(parseFloat(this.value)) || 0;
+            calculate();
+        });
+
+        // --- نظام الحفظ التلقائي (Auto-Save) ---
+        function saveToStorage() {
+            const data = {
+                unit: document.getElementById('unitValue').value,
+                volt: document.getElementById('voltageValue').value,
+                cap: document.getElementById('capacityInput').value,
+                count: document.getElementById('batteryCountInput').value,
+                panel: document.getElementById('panelInput').value,
+                sun: document.getElementById('sunHoursInput').value,
+                effVal: document.getElementById('efficiencyValue').value,
+                effKey: document.getElementById('efficiencyKey').value
+            };
+            localStorage.setItem('solar_pro_save', JSON.stringify(data));
+        }
+
+        function loadFromStorage() {
+            const saved = localStorage.getItem('solar_pro_save');
+            if(saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    document.getElementById('capacityInput').value = data.cap || 0;
+                    document.getElementById('batteryCountInput').value = data.count || 0;
+                    document.getElementById('panelInput').value = data.panel || 0;
+                    document.getElementById('sunHoursInput').value = data.sun || 0;
+                    
+                    if(data.unit) {
+                        document.getElementById('unitValue').value = data.unit;
+                        const voltGroup = document.getElementById('voltageGroup');
+                        if (data.unit === 'ah') voltGroup.classList.remove('hidden');
+                        else voltGroup.classList.add('hidden');
+                    }
+                    if(data.volt) document.getElementById('voltageValue').value = data.volt;
+                    if(data.effVal) document.getElementById('efficiencyValue').value = data.effVal;
+                    if(data.effKey) document.getElementById('efficiencyKey').value = data.effKey;
+                } catch(e) { console.error("Error loading save data."); }
+            }
+        }
+
         function calculate() {
             const t = dict[currentLang];
             let singleCapacity = parseFloat(document.getElementById('capacityInput').value) || 0;
-            let battCount = parseFloat(document.getElementById('batteryCountInput').value) || 0;
-            let panelWatts = parseFloat(document.getElementById('panelInput').value) || 0;
+            let battCount = Math.floor(parseFloat(document.getElementById('batteryCountInput').value)) || 0;
+            let panelWatts = Math.floor(parseFloat(document.getElementById('panelInput').value)) || 0;
             let sunHours = parseFloat(document.getElementById('sunHoursInput').value) || 0;
             let unit = document.getElementById('unitValue').value;
             let voltage = parseFloat(document.getElementById('voltageValue').value) || 48;
@@ -442,33 +599,25 @@
             let neededWh = totalEnergyWh / systemEfficiency;
             
             let totalPanelPower = (sunHours > 0) ? (neededWh / sunHours) : 0;
-            let numberOfPanels = (panelWatts > 0) ? Math.ceil(totalPanelPower / panelWatts) : 0;
+            let numberOfPanels = (panelWatts >= 10) ? Math.ceil(totalPanelPower / panelWatts) : 0;
 
-            if (singleCapacity > 0 && battCount > 0 && panelWatts > 0 && sunHours > 0) {
+            if (singleCapacity > 0 && battCount > 0 && panelWatts >= 10 && sunHours > 0) {
                 document.getElementById('panelsOutput').innerText = numberOfPanels;
                 document.getElementById('detailsOutput').innerText = `${t.totalPowerPre} ${Math.round(totalPanelPower)} ${t.wattWord}`;
             } else {
                 document.getElementById('panelsOutput').innerText = 0;
                 document.getElementById('detailsOutput').innerText = `${t.totalPowerPre} 0 ${t.wattWord}`;
             }
+
+            saveToStorage(); // حفظ البيانات تلقائياً مع كل عملية حسابية
         }
 
-        function resetData() {
-            document.getElementById('capacityInput').value = 0;
-            document.getElementById('batteryCountInput').value = 0;
-            document.getElementById('panelInput').value = 0;
-            document.getElementById('sunHoursInput').value = 0;
-            selectUnit('wh');
-            selectVoltage('48');
-            selectEfficiency('0.85', 'regionSanaa');
-            calculate();
-        }
-
+        // ربط أحداث الإدخال لبعض الحقول
         document.getElementById('capacityInput').addEventListener('input', calculate);
-        document.getElementById('batteryCountInput').addEventListener('input', calculate);
-        document.getElementById('panelInput').addEventListener('input', calculate);
         document.getElementById('sunHoursInput').addEventListener('input', calculate);
 
+        // تحميل البيانات المحفوظة ثم تطبيق اللغة التي ستقوم بدورها بتشغيل الحساب (calculate)
+        loadFromStorage();
         applyLanguage();
     </script>
     
@@ -478,7 +627,7 @@
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
                     .then(registration => {
-                        console.log('SW Registered successfully:', registration.scope);
+                        console.log('SW Registered successfully');
                     })
                     .catch(error => {
                         console.log('SW Registration failed:', error);
