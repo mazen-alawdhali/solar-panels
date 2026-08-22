@@ -348,7 +348,7 @@
                 <div class="result-details" id="detailsOutput">إجمالي القدرة المطلوبة: 0 واط</div>
                 
                 <div class="panel-note-box" data-i18n="panelNoteMsg">
-                    💡 <b>تنبيه هام:</b> الألواح المحسوبة مخصصة لشحن البطاريات المحددة فقط وليست لتغطية أحمال أخرى. لتصميم منظومة متكاملة يرجى زيارة <a href="https://solar-pro-calculator.netlify.app" target="_blank" class="panel-note-link">حاسبة الطاقة الشمسية الذكية</a>.
+                    💡 <b>تنبيه هام:</b> الألواح المحسوبة مخصصة لشحن البطاريات المحددة فقط وليست لتغطية أحمال أخرى. لتصميم منظومة متكاملة يرجى زيارة <a href="https://solar-calculator-pro.vercel.app" target="_blank" class="panel-note-link">حاسبة الطاقة الشمسية الذكية</a>.
                 </div>
             </div>
 
@@ -422,7 +422,7 @@
                 totalPowerPre: "إجمالي القدرة المطلوبة:", wattWord: "واط",
                 panelNoteMsg: '💡 <b>تنبيه هام:</b> الألواح المحسوبة مخصصة لشحن البطاريات المحددة فقط وليست لتغطية أحمال أخرى. لتصميم منظومة متكاملة يرجى زيارة <a href="https://solar-calculator-pro.vercel.app" target="_blank" class="panel-note-link">حاسبة الطاقة الشمسية الذكية</a>.',
                 resetBtn: "⚠️ تصفير البيانات", devBy: "تصميم وتطوير",
-                authorName: "مازن العوذلي", tagline: "تطبيق حاسبة الألواح الشمسية", visitsText: "عدد زيارات الحاسبة:",
+                authorName: "مازن العوذلي", tagline: "تطبيق حاسبة الألواح الشمسية", visitsText: "عدد زيارات الحاسبة:", offlineText: "غير متصل", unavailableText: "غير متاح",
                 modalTitle: "تأكيد تصفير البيانات", modalDesc: "هل أنت متأكد من تصفير جميع القيم والمدخلات وإعادتها للحالة الافتراضية؟",
                 cancelBtn: "إلغاء", confirmBtn: "تأكيد التصفير"
             },
@@ -439,7 +439,7 @@
                 totalPowerPre: "Total Required Power:", wattWord: "Watts",
                 panelNoteMsg: '💡 <b>Important Note:</b> Calculated panels are dedicated to charging the specified batteries only, not for powering other loads. For full system sizing, please visit <a href="https://solar-calculator-pro.vercel.app" target="_blank" class="panel-note-link">Smart Solar Calculator</a>.',
                 resetBtn: "⚠️ Reset Data", devBy: "Designed & Developed by",
-                authorName: "Mazen Alawdhali", tagline: "Solar Panels Calculator App", visitsText: "Calculator Visits:",
+                authorName: "Mazen Alawdhali", tagline: "Solar Panels Calculator App", visitsText: "Calculator Visits:", offlineText: "Offline", unavailableText: "Unavailable",
                 modalTitle: "Confirm Reset", modalDesc: "Are you sure you want to reset all input values to default?",
                 cancelBtn: "Cancel", confirmBtn: "Confirm Reset"
             }
@@ -451,6 +451,7 @@
             currentLang = currentLang === 'ar' ? 'en' : 'ar';
             localStorage.setItem('solar_panel_lang', currentLang);
             applyLanguage();
+            updateVisitorCount();
         }
 
         function applyLanguage() {
@@ -493,27 +494,36 @@
             }
         }
 
-        // --- دوال الاتصال بالعداد على Vercel API ---
+        // --- دوال الاتصال بالعداد على Vercel API المحدثة بحالات عدم الاتصال والخطأ ---
         async function updateVisitorCount() {
             const counterElement = document.getElementById('visitCount');
             if (!counterElement) return;
 
-            // تم تصحيح اسم الملف إلى counter ليتطابق مع Vercel
+            const t = dict[currentLang];
+
+            if (!navigator.onLine) {
+                counterElement.innerText = t.offlineText;
+                counterElement.style.color = '#f59e0b'; // ذهبي
+                return;
+            }
+
             const apiUrl = 'https://solar-calculator-pro.vercel.app/api/counter?app=panel_calculator';
 
             try {
                 const response = await fetch(apiUrl, { method: 'POST' });
+                if (!response.ok) throw new Error("API Error");
                 const data = await response.json();
                 
-                if (data && data.visits !== undefined) {
-                    counterElement.innerText = Number(data.visits).toLocaleString('en-US');
-                } else if (data && data.count !== undefined) {
-                    counterElement.innerText = Number(data.count).toLocaleString('en-US');
+                let val = data.visits !== undefined ? data.visits : data.count;
+                if (val !== undefined) {
+                    counterElement.innerText = Number(val).toLocaleString('en-US');
+                    counterElement.style.color = '#10b981'; // أخضر
                 } else {
-                    counterElement.innerText = '1';
+                    throw new Error("Invalid Data");
                 }
             } catch (error) {
-                counterElement.innerText = '1';
+                counterElement.innerText = t.unavailableText;
+                counterElement.style.color = '#ef4444'; // أحمر
             }
         }
 
@@ -695,6 +705,10 @@
         document.getElementById('capacityInput').addEventListener('input', calculate);
         document.getElementById('sunHoursInput').addEventListener('input', calculate);
         document.getElementById('dodValue').addEventListener('input', calculate);
+
+        // الاستماع لتغير حالة الاتصال وتحديث العداد تلقائياً
+        window.addEventListener('online', updateVisitorCount);
+        window.addEventListener('offline', updateVisitorCount);
 
         // تحميل البيانات المحفوظة ثم تطبيق اللغة وتشغيل عداد الزيارات
         loadFromStorage();
