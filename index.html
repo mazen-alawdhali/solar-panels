@@ -197,7 +197,13 @@
         .solar-footer { background-color: #0f172a; text-align: center; padding: 20px 16px; margin-top: 24px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; border-top: 1px solid #334155; }
         .copyright-text { font-size: 13.5px; margin: 0 0 4px 0; color: #e2e8f0; }
         .author-name { color: #38bdf8; font-weight: 700; }
-        .tagline { font-size: 11px; color: #94a3b8; margin: 0 0 14px 0; }
+        .tagline { font-size: 11px; color: #94a3b8; margin: 0 0 8px 0; }
+        
+        /* تنسيق عداد الزيارات المتطابق مع الصورة */
+        .visitor-counter { font-size: 14px; color: #94a3b8; font-weight: 600; margin-top: 10px; margin-bottom: 14px; }
+        .visit-num { color: #10b981; font-weight: 700; margin-left: 4px; }
+        html[dir="ltr"] .visit-num { margin-left: 0; margin-right: 4px; }
+
         .social-links { display: flex; justify-content: center; gap: 16px; margin-top: 14px; }
         .social-btn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; color: white; text-decoration: none; transition: transform 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2); }
         .social-btn:hover { transform: scale(1.1); }
@@ -341,7 +347,6 @@
                 </div>
                 <div class="result-details" id="detailsOutput">إجمالي القدرة المطلوبة: 0 واط</div>
                 
-                <!-- التنبيه التوضيحي المحدث -->
                 <div class="panel-note-box" data-i18n="panelNoteMsg">
                     💡 <b>تنبيه هام:</b> الألواح المحسوبة مخصصة لشحن البطاريات المحددة فقط وليست لتغطية أحمال أخرى. لتصميم منظومة متكاملة يرجى زيارة <a href="https://solar-pro-calculator.netlify.app" target="_blank" class="panel-note-link">حاسبة الطاقة الشمسية الذكية</a>.
                 </div>
@@ -355,6 +360,9 @@
         <footer class="solar-footer">
             <p class="copyright-text"><span data-i18n="devBy">تصميم وتطوير</span> <span id="authorName" class="author-name">مازن العوذلي</span> &copy; 2026</p>
             <p class="tagline" data-i18n="tagline">تطبيق حاسبة الألواح الشمسية</p>
+            <div class="visitor-counter">
+                <span data-i18n="visitsText">عدد زيارات الحاسبة:</span> <span id="visitCount" class="visit-num">...</span>
+            </div>
             <div class="social-links">
                 <a href="https://wa.me/message/BSOAV5RVXBNQP1" target="_blank" class="social-btn whatsapp"><svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.966C16.528 1.975 14.067 1.053 12 1.053c-5.438 0-9.864 4.373-9.868 9.803-.001 1.714.453 3.39 1.317 4.873L2.43 21.48l5.857-1.534zM16.71 14.65c-.259-.13-1.534-.759-1.773-.846-.239-.087-.413-.13-.587.13-.174.26-.674.846-.826 1.018-.152.173-.304.195-.563.065-.259-.13-1.096-.404-2.088-1.292-.771-.69-1.292-1.542-1.444-1.802-.152-.26-.016-.4.114-.53.117-.117.259-.304.39-.455.13-.152.174-.26.26-.433.087-.173.043-.325-.022-.455-.065-.13-.587-1.413-.804-1.944-.213-.518-.447-.448-.607-.456-.157-.008-.337-.01-.517-.01-.18 0-.474.067-.72.337-.247.271-.943.924-.943 2.255s.967 2.61 1.101 2.784c.134.173 1.902 2.904 4.609 4.07.644.277 1.148.443 1.541.568.647.206 1.236.177 1.701.108.519-.077 1.534-.627 1.751-1.234.217-.607.217-1.127.152-1.234-.064-.108-.239-.173-.499-.303z"/></svg></a>
                 <a href="https://www.facebook.com/share/1YF9n8KTFK/" target="_blank" class="social-btn facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
@@ -414,7 +422,7 @@
                 totalPowerPre: "إجمالي القدرة المطلوبة:", wattWord: "واط",
                 panelNoteMsg: '💡 <b>تنبيه هام:</b> الألواح المحسوبة مخصصة لشحن البطاريات المحددة فقط وليست لتغطية أحمال أخرى. لتصميم منظومة متكاملة يرجى زيارة <a href="https://solar-pro-calculator.netlify.app" target="_blank" class="panel-note-link">حاسبة الطاقة الشمسية الذكية</a>.',
                 resetBtn: "⚠️ تصفير البيانات", devBy: "تصميم وتطوير",
-                authorName: "مازن العوذلي", tagline: "تطبيق حاسبة الألواح الشمسية",
+                authorName: "مازن العوذلي", tagline: "تطبيق حاسبة الألواح الشمسية", visitsText: "عدد زيارات الحاسبة:",
                 modalTitle: "تأكيد تصفير البيانات", modalDesc: "هل أنت متأكد من تصفير جميع القيم والمدخلات وإعادتها للحالة الافتراضية؟",
                 cancelBtn: "إلغاء", confirmBtn: "تأكيد التصفير"
             },
@@ -431,7 +439,7 @@
                 totalPowerPre: "Total Required Power:", wattWord: "Watts",
                 panelNoteMsg: '💡 <b>Important Note:</b> Calculated panels are dedicated to charging the specified batteries only, not for powering other loads. For full system sizing, please visit <a href="https://solar-pro-calculator.netlify.app" target="_blank" class="panel-note-link">Smart Solar Calculator</a>.',
                 resetBtn: "⚠️ Reset Data", devBy: "Designed & Developed by",
-                authorName: "Mazen Alawdhali", tagline: "Solar Panels Calculator App",
+                authorName: "Mazen Alawdhali", tagline: "Solar Panels Calculator App", visitsText: "Calculator Visits:",
                 modalTitle: "Confirm Reset", modalDesc: "Are you sure you want to reset all input values to default?",
                 cancelBtn: "Cancel", confirmBtn: "Confirm Reset"
             }
@@ -482,6 +490,26 @@
                 }
                 input.value = `DoD ${val}%`;
                 calculate();
+            }
+        }
+
+        // --- دوال الاتصال بالعداد على Vercel API ---
+        async function updateVisitorCount() {
+            const counterElement = document.getElementById('visitCount');
+            if (!counterElement) return;
+
+            const apiUrl = 'https://solar-pro-calculator.vercel.app/api/visits?app=panel_calculator';
+
+            try {
+                const response = await fetch(apiUrl, { method: 'POST' });
+                const data = await response.json();
+                if (data && data.visits !== undefined) {
+                    counterElement.innerText = Number(data.visits).toLocaleString('en-US');
+                } else {
+                    counterElement.innerText = '1';
+                }
+            } catch (error) {
+                counterElement.innerText = '1';
             }
         }
 
@@ -664,9 +692,10 @@
         document.getElementById('sunHoursInput').addEventListener('input', calculate);
         document.getElementById('dodValue').addEventListener('input', calculate);
 
-        // تحميل البيانات المحفوظة ثم تطبيق اللغة التي ستقوم بدورها بتشغيل الحساب (calculate)
+        // تحميل البيانات المحفوظة ثم تطبيق اللغة وتشغيل عداد الزيارات
         loadFromStorage();
         applyLanguage();
+        updateVisitorCount();
     </script>
     
     <!-- كود تسجيل Service Worker لعمل التطبيق Offline -->
