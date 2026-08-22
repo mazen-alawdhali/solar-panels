@@ -420,7 +420,7 @@
                 dodLabel: "نسبة تفريغ البطارية (DoD):",
                 resultLabel: "عدد الألواح المطلوبة للشحن", panelsWord: "ألواح", 
                 totalPowerPre: "إجمالي القدرة المطلوبة:", wattWord: "واط",
-                panelNoteMsg: '💡 <b>تنبيه هام:</b> الألواح المحسوبة مخصصة لشحن البطاريات المحددة فقط وليست لتغطية أحمال أخرى. لتصميم منظومة متكاملة يرجى زيارة <a href="https://solar-pro-calculator.netlify.app" target="_blank" class="panel-note-link">حاسبة الطاقة الشمسية الذكية</a>.',
+                panelNoteMsg: '💡 <b>تنبيه هام:</b> الألواح المحسوبة مخصصة لشحن البطاريات المحددة فقط وليست لتغطية أحمال أخرى. لتصميم منظومة متكاملة يرجى زيارة <a href="https://solar-calculator-pro.vercel.app" target="_blank" class="panel-note-link">حاسبة الطاقة الشمسية الذكية</a>.',
                 resetBtn: "⚠️ تصفير البيانات", devBy: "تصميم وتطوير",
                 authorName: "مازن العوذلي", tagline: "تطبيق حاسبة الألواح الشمسية", visitsText: "عدد زيارات الحاسبة:",
                 modalTitle: "تأكيد تصفير البيانات", modalDesc: "هل أنت متأكد من تصفير جميع القيم والمدخلات وإعادتها للحالة الافتراضية؟",
@@ -437,7 +437,7 @@
                 dodLabel: "Battery DoD Rate:",
                 resultLabel: "Required Panels for Charging", panelsWord: "Panels", 
                 totalPowerPre: "Total Required Power:", wattWord: "Watts",
-                panelNoteMsg: '💡 <b>Important Note:</b> Calculated panels are dedicated to charging the specified batteries only, not for powering other loads. For full system sizing, please visit <a href="https://solar-pro-calculator.netlify.app" target="_blank" class="panel-note-link">Smart Solar Calculator</a>.',
+                panelNoteMsg: '💡 <b>Important Note:</b> Calculated panels are dedicated to charging the specified batteries only, not for powering other loads. For full system sizing, please visit <a href="https://solar-calculator-pro.vercel.app" target="_blank" class="panel-note-link">Smart Solar Calculator</a>.',
                 resetBtn: "⚠️ Reset Data", devBy: "Designed & Developed by",
                 authorName: "Mazen Alawdhali", tagline: "Solar Panels Calculator App", visitsText: "Calculator Visits:",
                 modalTitle: "Confirm Reset", modalDesc: "Are you sure you want to reset all input values to default?",
@@ -498,13 +498,17 @@
             const counterElement = document.getElementById('visitCount');
             if (!counterElement) return;
 
-            const apiUrl = 'https://solar-pro-calculator.vercel.app/api/visits?app=panel_calculator';
+            // تم تصحيح اسم الملف إلى counter ليتطابق مع Vercel
+            const apiUrl = 'https://solar-calculator-pro.vercel.app/api/counter?app=panel_calculator';
 
             try {
                 const response = await fetch(apiUrl, { method: 'POST' });
                 const data = await response.json();
+                
                 if (data && data.visits !== undefined) {
                     counterElement.innerText = Number(data.visits).toLocaleString('en-US');
+                } else if (data && data.count !== undefined) {
+                    counterElement.innerText = Number(data.count).toLocaleString('en-US');
                 } else {
                     counterElement.innerText = '1';
                 }
