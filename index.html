@@ -298,7 +298,7 @@
                 </div>
                 <div class="input-group">
                     <label data-i18n="batteryCount">عدد البطاريات:</label>
-                    <input type="number" id="batteryCountInput" value="0" min="0" step="1">
+                    <input type="text" inputmode="numeric" id="batteryCountInput" value="0">
                 </div>
             </div>
 
@@ -306,7 +306,7 @@
             <div class="flex-row">
                 <div class="input-group">
                     <label data-i18n="panelPower">قدرة اللوح الواحد (W):</label>
-                    <input type="number" id="panelInput" value="0" min="0">
+                    <input type="text" inputmode="numeric" id="panelInput" value="0">
                 </div>
                 <div class="input-group">
                     <label data-i18n="sunHours">ساعات ذروة الشمس:</label>
@@ -451,7 +451,6 @@
             currentLang = currentLang === 'ar' ? 'en' : 'ar';
             localStorage.setItem('solar_panel_lang', currentLang);
             applyLanguage();
-            updateVisitorCount();
         }
 
         function applyLanguage() {
@@ -614,15 +613,19 @@
             }
         });
 
-        // تنظيف ومنع إدخال الكسور لعدد البطاريات
+        // معالجة جراحية لمنع الكسور والأصفار المتقدمة (مثل 05) لعدد البطاريات
         document.getElementById('batteryCountInput').addEventListener('input', function() {
-            if (this.value.includes('.')) this.value = Math.floor(parseFloat(this.value)) || 0;
+            let val = this.value.replace(/[^\d]/g, ''); // حظر النقطة والرموز
+            if (val.length > 1 && val.startsWith('0')) val = val.replace(/^0+/, ''); // إزالة الأصفار المتقدمة
+            this.value = val;
             calculate();
         });
 
-        // تنظيف ومنع إدخال الكسور لقدرة اللوح وتوحيد الحماية
+        // معالجة جراحية لمنع الكسور والأصفار المتقدمة (مثل 05) لقدرة اللوح
         document.getElementById('panelInput').addEventListener('input', function() {
-            if (this.value.includes('.')) this.value = Math.floor(parseFloat(this.value)) || 0;
+            let val = this.value.replace(/[^\d]/g, ''); // حظر النقطة والرموز
+            if (val.length > 1 && val.startsWith('0')) val = val.replace(/^0+/, ''); // إزالة الأصفار المتقدمة
+            this.value = val;
             calculate();
         });
 
@@ -669,8 +672,8 @@
         function calculate() {
             const t = dict[currentLang];
             let singleCapacity = parseFloat(document.getElementById('capacityInput').value) || 0;
-            let battCount = Math.floor(parseFloat(document.getElementById('batteryCountInput').value)) || 0;
-            let panelWatts = Math.floor(parseFloat(document.getElementById('panelInput').value)) || 0;
+            let battCount = parseInt(document.getElementById('batteryCountInput').value, 10) || 0;
+            let panelWatts = parseInt(document.getElementById('panelInput').value, 10) || 0;
             let sunHours = parseFloat(document.getElementById('sunHoursInput').value) || 0;
             let unit = document.getElementById('unitValue').value;
             let voltage = parseFloat(document.getElementById('voltageValue').value) || 48;
