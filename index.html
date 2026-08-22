@@ -161,7 +161,7 @@
         .result-box { 
             background: rgba(3, 105, 161, 0.1); 
             border: 1px solid rgba(3, 105, 161, 0.3); 
-            padding: 24px 16px; 
+            padding: 24px 16px 16px; 
             border-radius: 16px; 
             text-align: center; 
             margin-top: 24px; 
@@ -169,6 +169,11 @@
         .result-label { font-size: 13px; color: #94a3b8; margin-bottom: 8px; font-weight: 600; }
         .result-number { font-size: 46px; font-weight: bold; color: #38bdf8; line-height: 1; margin-bottom: 10px; text-shadow: 0 2px 8px rgba(56, 189, 248, 0.3); }
         .result-details { font-size: 12.5px; color: #64748b; font-weight: 500; }
+        
+        /* تنسيق صندوق التنبيه التوضيحي */
+        .panel-note-box { margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(56, 189, 248, 0.2); font-size: 11.5px; color: #94a3b8; line-height: 1.6; text-align: center; }
+        .panel-note-link { color: #38bdf8; font-weight: 700; text-decoration: underline; cursor: pointer; transition: color 0.2s; }
+        .panel-note-link:hover { color: #7dd3fc; }
 
         .btn-reset { 
             width: 100%; 
@@ -335,6 +340,11 @@
                     <span style="font-size: 16px;" data-i18n="panelsWord">ألواح</span>
                 </div>
                 <div class="result-details" id="detailsOutput">إجمالي القدرة المطلوبة: 0 واط</div>
+                
+                <!-- التنبيه التوضيحي المضاف -->
+                <div class="panel-note-box" data-i18n="panelNoteMsg">
+                    💡 <b>تنبيه هام:</b> الألواح المحسوبة مخصصة لشحن البطاريات المحددة فقط وليست لتغطية أحمال المنظومة. لتصميم منظومة متكاملة يرجى زيارة <a href="https://solar-pro-calculator.netlify.app" target="_blank" class="panel-note-link">حاسبة الطاقة الشمسية الذكية</a>.
+                </div>
             </div>
 
             <button class="btn-reset" onclick="openModal()">
@@ -402,6 +412,7 @@
                 dodLabel: "نسبة تفريغ البطارية (DoD):",
                 resultLabel: "عدد الألواح المطلوبة للشحن", panelsWord: "ألواح", 
                 totalPowerPre: "إجمالي القدرة المطلوبة:", wattWord: "واط",
+                panelNoteMsg: '💡 <b>تنبيه هام:</b> الألواح المحسوبة مخصصة لشحن البطاريات المحددة فقط وليست لتغطية أحمال المنظومة. لتصميم منظومة متكاملة يرجى زيارة <a href="https://solar-pro-calculator.netlify.app" target="_blank" class="panel-note-link">حاسبة الطاقة الشمسية الذكية</a>.',
                 resetBtn: "⚠️ تصفير البيانات", devBy: "تصميم وتطوير",
                 authorName: "مازن العوذلي", tagline: "تطبيق حاسبة الألواح الشمسية",
                 modalTitle: "تأكيد تصفير البيانات", modalDesc: "هل أنت متأكد من تصفير جميع القيم والمدخلات وإعادتها للحالة الافتراضية؟",
@@ -418,6 +429,7 @@
                 dodLabel: "Battery DoD Rate:",
                 resultLabel: "Required Panels for Charging", panelsWord: "Panels", 
                 totalPowerPre: "Total Required Power:", wattWord: "Watts",
+                panelNoteMsg: '💡 <b>Important Note:</b> Calculated panels are dedicated to charging the specified batteries only, not for powering daytime loads. For full system sizing, please visit <a href="https://solar-pro-calculator.netlify.app" target="_blank" class="panel-note-link">Smart Solar Calculator</a>.',
                 resetBtn: "⚠️ Reset Data", devBy: "Designed & Developed by",
                 authorName: "Mazen Alawdhali", tagline: "Solar Panels Calculator App",
                 modalTitle: "Confirm Reset", modalDesc: "Are you sure you want to reset all input values to default?",
