@@ -214,6 +214,7 @@
             transform: translateY(-20px) scale(0.95); transition: 0.3s ease;
         }
         .modal-overlay.active .modal-box { transform: translateY(0) scale(1); }
+        .modal-icon { font-size: 48px; margin-bottom: 12px; line-height: 1; display: block; }
         .modal-box h3 { margin: 0 0 12px; color: #f8fafc; font-size: 18px; font-weight: 800; }
         .modal-box p { margin: 0 0 24px; color: #94a3b8; font-size: 13.5px; line-height: 1.6; }
         .modal-actions { display: flex; gap: 12px; justify-content: center; }
@@ -347,6 +348,7 @@
     <!-- نافذة تأكيد الحذف (المودال) -->
     <div id="confirmModal" class="modal-overlay">
         <div class="modal-box">
+            <span class="modal-icon">⚠️</span>
             <h3 data-i18n="modalTitle">تأكيد حذف البيانات</h3>
             <p data-i18n="modalDesc">هل أنت متأكد أنك تريد حذف جميع المدخلات وإعادتها للوضع الافتراضي؟</p>
             <div class="modal-actions">
@@ -367,7 +369,7 @@
         // حظر القائمة اليمنى لمنع فحص العناصر
         document.addEventListener('contextmenu', e => e.preventDefault());
 
-        // حظر أدوات المطورين واختصارات لوحة المفاتيح
+        // حظر أدوات المطورين وااختصارات لوحة المفاتيح
         document.addEventListener('keydown', e => {
             if (
                 e.key === 'F12' ||
