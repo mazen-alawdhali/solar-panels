@@ -158,6 +158,20 @@
 
         .hidden { display: none !important; }
 
+        /* تنسيق صندوق التنبيه الهندسي لسلامة المنظومة */
+        .system-warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid #f59e0b;
+            color: #fbbf24;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 11.5px;
+            line-height: 1.6;
+            margin-top: 14px;
+            text-align: right;
+            display: none;
+        }
+
         .result-box { 
             background: rgba(3, 105, 161, 0.1); 
             border: 1px solid rgba(3, 105, 161, 0.3); 
@@ -327,7 +341,7 @@
                     </div>
                 </div>
                 
-                <div class="input-group hidden" id="voltageGroup">
+                <div class="input-group" id="voltageGroup">
                     <label data-i18n="sysVoltage">جهد المنظومة (V):</label>
                     <div class="custom-select-wrapper">
                         <div class="custom-select-display" onclick="toggleDropdown('voltDropdown')">
@@ -393,6 +407,9 @@
                     <input type="text" inputmode="numeric" id="dodValue" placeholder="DoD 100%" value="DoD 100%" lang="en" onfocus="formatDodInput(this, true)" onblur="formatDodInput(this, false)">
                 </div>
             </div>
+
+            <!-- صندوق التنبيه الهندسي الديناميكي -->
+            <div id="systemWarningBox" class="system-warning-box"></div>
 
             <div class="result-box">
                 <div class="result-label" data-i18n="resultLabel">عدد الألواح المطلوبة للشحن</div>
@@ -482,7 +499,10 @@
                 panelPower: "قدرة اللوح الواحد (W):", sunHours: "ساعات ذروة الشمس:", 
                 regionEfficiency: "منطقة الاستخدام (نسبة الكفاءة):", regionSanaa: "مناطق معتدلة (85%)", regionAden: "مناطق حارة (75%)",
                 dodLabel: "نسبة تفريغ البطارية (DoD):",
-                resultLabel: "عدد الألواح المطلوبة للشحن", panelsWord: "ألواح", 
+                warn12V: "⚠️ <b>ملاحظة هندسية:</b> السعة الحالية تزيد عن {LIMIT} على نظام 12V. لتفادي تيار الشحن العالي وسخونة الكابلات وفقد التوازن، يُوصى بشدة بترقية المنظومة إلى 24V أو 48V.",
+                warn24V: "⚠️ <b>ملاحظة هندسية:</b> السعة الحالية تزيد عن {LIMIT} على نظام 24V. للحصول على كفاءة أعلى وأمان تام للتيارات العالية، يُفضل ترقية المنظومة إلى 48V.",
+                resultLabel: "عدد الألواح المطلوبة للشحن", 
+                panelOne: "لوح واحد", panelTwo: "لوحان", panelPlural: "ألواح", panelSingle: "لوحاً",
                 totalPowerPre: "إجمالي القدرة المطلوبة:", wattWord: "واط",
                 panelNoteMsg: '💡 <b>تنبيه هام:</b> هذه النتائج <b>تقديرية</b> لمساعدة الفنيين والمستخدمين في التخطيط المبدئي لشحن البطاريات. لتصميم وتغذية الأحمال المنزلية يمكنك استخدام <a href="https://solar-calculator-pro.vercel.app" target="_blank" class="panel-note-link">حاسبة الطاقة الشمسية الذكية</a>.<br><b>مع ضرورة استشارة مهندس أو فني متخصص للتركيب الميداني.</b>',
                 resetBtn: "⚠️ تصفير البيانات", 
@@ -503,7 +523,10 @@
                 panelPower: "Single Panel Power (W):", sunHours: "Peak Sun Hours:", 
                 regionEfficiency: "Geographic Region (Efficiency):", regionSanaa: "Mild Regions (85%)", regionAden: "Hot Regions (75%)",
                 dodLabel: "Battery DoD Rate:",
-                resultLabel: "Required Panels for Charging", panelsWord: "Panels", 
+                warn12V: "⚠️ <b>Engineering Note:</b> Capacity exceeds {LIMIT} on a 12V system. To avoid high currents, cable overheating, and imbalance, upgrading to 24V or 48V is strongly recommended.",
+                warn24V: "⚠️ <b>Engineering Note:</b> Capacity exceeds {LIMIT} on a 24V system. For higher efficiency and safety regarding high currents, upgrading to 48V is recommended.",
+                resultLabel: "Required Panels for Charging", 
+                panelOne: "Panel", panelTwo: "Panels", panelPlural: "Panels", panelSingle: "Panels",
                 totalPowerPre: "Total Required Power:", wattWord: "Watts",
                 panelNoteMsg: '💡 <b>Important Note:</b> These results are <b>estimated</b> to assist technicians and users in initial battery charging planning. For designing home loads, use the <a href="https://solar-calculator-pro.vercel.app" target="_blank" class="panel-note-link">Smart Solar Calculator</a>.<br><b>Always consult a qualified engineer or specialist for field installation.</b>',
                 resetBtn: "⚠️ Reset Data", 
@@ -618,9 +641,6 @@
             document.getElementById('unitDisplay').innerText = t['wh'];
             document.getElementById('voltDisplay').innerText = t['v48'];
             document.getElementById('efficiencyDisplay').innerText = t['regionSanaa'];
-            
-            const voltGroup = document.getElementById('voltageGroup');
-            voltGroup.classList.add('hidden'); // الواط هو الافتراضي، نخفي الفولت
 
             calculate();
             closeModal();
@@ -652,10 +672,6 @@
             document.getElementById('unitDisplay').innerText = t[val];
             document.getElementById('unitDropdown').classList.remove('show');
             document.getElementById('unitDropdown').closest('.custom-select-wrapper').style.zIndex = '1';
-            
-            const voltGroup = document.getElementById('voltageGroup');
-            if (val === 'ah') voltGroup.classList.remove('hidden');
-            else voltGroup.classList.add('hidden');
             
             calculate();
         }
@@ -729,9 +745,6 @@
                     
                     if(data.unit) {
                         document.getElementById('unitValue').value = data.unit;
-                        const voltGroup = document.getElementById('voltageGroup');
-                        if (data.unit === 'ah') voltGroup.classList.remove('hidden');
-                        else voltGroup.classList.add('hidden');
                     }
                     if(data.volt) document.getElementById('voltageValue').value = data.volt;
                     if(data.effVal) document.getElementById('efficiencyValue').value = data.effVal;
@@ -759,6 +772,27 @@
                                 (unit === 'wh') ? (singleCapacity * battCount) : 
                                 (singleCapacity * voltage * battCount);
             
+            // فحص حد السلامة الهندسية وإظهار التنبيه الديناميكي المخصص
+            const warningEl = document.getElementById('systemWarningBox');
+            let grossAh = (unit === 'ah') ? (singleCapacity * battCount) : (grossEnergyWh / voltage);
+
+            if (singleCapacity > 0 && battCount > 0) {
+                let limitText = "";
+                if (voltage === 12 && grossAh > 200) {
+                    limitText = (unit === 'kwh') ? "2.4kWh" : (unit === 'wh') ? "2400Wh" : "200Ah";
+                    warningEl.innerHTML = t.warn12V.replace("{LIMIT}", limitText);
+                    warningEl.style.display = 'block';
+                } else if (voltage === 24 && grossAh > 400) {
+                    limitText = (unit === 'kwh') ? "9.6kWh" : (unit === 'wh') ? "9600Wh" : "400Ah";
+                    warningEl.innerHTML = t.warn24V.replace("{LIMIT}", limitText);
+                    warningEl.style.display = 'block';
+                } else {
+                    warningEl.style.display = 'none';
+                }
+            } else {
+                warningEl.style.display = 'none';
+            }
+
             let totalEnergyWh = grossEnergyWh * dodFactor;
             let neededWh = totalEnergyWh / systemEfficiency;
             
@@ -766,10 +800,24 @@
             let numberOfPanels = (panelWatts >= 10) ? Math.ceil(totalPanelPower / panelWatts) : 0;
 
             if (singleCapacity > 0 && battCount > 0 && panelWatts >= 10 && sunHours > 0) {
+                let unitText = "";
+                if (currentLang === 'ar') {
+                    if (numberOfPanels === 1) unitText = t.panelOne;
+                    else if (numberOfPanels === 2) unitText = t.panelTwo;
+                    else if (numberOfPanels >= 3 && numberOfPanels <= 10) unitText = t.panelPlural;
+                    else unitText = t.panelSingle;
+                } else {
+                    unitText = (numberOfPanels === 1) ? t.panelOne : t.panelPlural;
+                }
+
                 document.getElementById('panelsOutput').innerText = numberOfPanels;
+                const panelWordEl = document.querySelector('[data-i18n="panelsWord"]') || document.querySelector('.result-number span:last-child');
+                if (panelWordEl) panelWordEl.innerText = unitText;
                 document.getElementById('detailsOutput').innerText = `${t.totalPowerPre} ${Math.round(totalPanelPower)} ${t.wattWord}`;
             } else {
                 document.getElementById('panelsOutput').innerText = 0;
+                const panelWordEl = document.querySelector('[data-i18n="panelsWord"]') || document.querySelector('.result-number span:last-child');
+                if (panelWordEl) panelWordEl.innerText = (currentLang === 'ar') ? t.panelPlural : t.panelPlural;
                 document.getElementById('detailsOutput').innerText = `${t.totalPowerPre} 0 ${t.wattWord}`;
             }
 
