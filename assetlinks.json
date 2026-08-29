@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "app.vercel.solar_panels_pro.twa",
-        "sha256_cert_fingerprints": ["FF:D4:88:D9:E3:FE:10:B0:C3:CE:DD:83:EA:3D:06:51:3F:A5:36:45:3F:95:78:9E:1B:21:38:4B:C9:10:6D:EA"]
-      }
-    }]
