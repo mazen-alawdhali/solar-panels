@@ -283,6 +283,10 @@
         .facebook { background-color: #1877F2; }
         .social-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
+        .privacy-icon-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; color: #64748b; margin-top: 14px; transition: color 0.2s, transform 0.2s; text-decoration: none; font-size: 12px; font-weight: 600; }
+        .privacy-icon-btn:hover { color: #38bdf8; transform: scale(1.05); }
+        .privacy-icon-btn svg { width: 15px; height: 15px; fill: currentColor; }
+
         /* تنسيقات نافذة التأكيد (المودال) */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -451,6 +455,12 @@
                 <a href="https://wa.me/message/BSOAV5RVXBNQP1" target="_blank" class="social-btn whatsapp"><svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.966C16.528 1.975 14.067 1.053 12 1.053c-5.438 0-9.864 4.373-9.868 9.803-.001 1.714.453 3.39 1.317 4.873L2.43 21.48l5.857-1.534zM16.71 14.65c-.259-.13-1.534-.759-1.773-.846-.239-.087-.413-.13-.587.13-.174.26-.674.846-.826 1.018-.152.173-.304.195-.563.065-.259-.13-1.096-.404-2.088-1.292-.771-.69-1.292-1.542-1.444-1.802-.152-.26-.016-.4.114-.53.117-.117.259-.304.39-.455.13-.152.174-.26.26-.433.087-.173.043-.325-.022-.455-.065-.13-.587-1.413-.804-1.944-.213-.518-.447-.448-.607-.456-.157-.008-.337-.01-.517-.01-.18 0-.474.067-.72.337-.247.271-.943.924-.943 2.255s.967 2.61 1.101 2.784c.134.173 1.902 2.904 4.609 4.07.644.277 1.148.443 1.541.568.647.206 1.236.177 1.701.108.519-.077 1.534-.627 1.751-1.234.217-.607.217-1.127.152-1.234-.064-.108-.239-.173-.499-.303z"/></svg></a>
                 <a href="https://www.facebook.com/share/1YF9n8KTFK/" target="_blank" class="social-btn facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
             </div>
+            <div>
+                <a href="privacy.html" target="_blank" class="privacy-icon-btn" id="privacyLink">
+                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                    <span data-i18n="privacyPolicy">سياسة الخصوصية</span>
+                </a>
+            </div>
         </footer>
     </div>
 
@@ -515,7 +525,8 @@
                 devBy: "تصميم وتطوير",
                 authorName: "مازن العوذلي", tagline: "تطبيق حاسبة الألواح الشمسية", visitsText: "عدد زيارات الحاسبة:", offlineText: "غير متصل", unavailableText: "غير متاح",
                 modalTitle: "تأكيد تصفير البيانات", modalDesc: "هل أنت متأكد من تصفير جميع القيم والمدخلات وإعادتها للحالة الافتراضية؟",
-                cancelBtn: "إلغاء", confirmBtn: "تأكيد التصفير"
+                cancelBtn: "إلغاء", confirmBtn: "تأكيد التصفير",
+                privacyPolicy: "سياسة الخصوصية"
             },
             en: {
                 appTitle: "Solar Panels Calculator ⚡", 
@@ -539,7 +550,8 @@
                 devBy: "Designed & Developed by",
                 authorName: "Mazen Alawdhali", tagline: "Solar Panels Calculator App", visitsText: "Calculator Visits:", offlineText: "Offline", unavailableText: "Unavailable",
                 modalTitle: "Confirm Reset", modalDesc: "Are you sure you want to reset all input values to default?",
-                cancelBtn: "Cancel", confirmBtn: "Confirm Reset"
+                cancelBtn: "Cancel", confirmBtn: "Confirm Reset",
+                privacyPolicy: "Privacy Policy"
             }
         };
 
