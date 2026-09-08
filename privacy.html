@@ -136,7 +136,7 @@
 <body>
 
 <div class="container">
-    <button class="lang-toggle" onclick="toggleLanguage()" id="langBtn">EN <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
+    <button class="lang-toggle" onclick="toggleLanguage()" id="langBtn">EN <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
 
     <div class="header">
         <h1 class="main-title" data-i18n="title">سياسة الخصوصية</h1>
@@ -201,10 +201,12 @@
         }
     };
 
-    let currentLang = localStorage.getItem('panel_app_lang') || 'ar';
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentLang = urlParams.get('lang') || localStorage.getItem('solar_panel_lang') || localStorage.getItem('panel_app_lang') || 'ar';
 
     function toggleLanguage() {
         currentLang = currentLang === 'ar' ? 'en' : 'ar';
+        localStorage.setItem('solar_panel_lang', currentLang);
         localStorage.setItem('panel_app_lang', currentLang);
         applyLanguage();
     }
