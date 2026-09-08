@@ -3,120 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - سياسة الخصوصية</title>
+    <title id="pageTitle">سياسة الخصوصية - حاسبة الألواح الشمسية</title>
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.8;
-            color: #e2e8f0;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 30px 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.8;
+            transition: all 0.3s ease;
         }
         .container {
-            background: #1e293b;
-            padding: 32px 24px;
+            width: 100%;
+            max-width: 650px;
+            background-color: #1e293b;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+            padding: 28px 20px;
+            position: relative;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+        .lang-toggle {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 5px 12px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-            border: 1px solid #334155;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 10;
         }
-        .section-ar {
-            direction: rtl;
-            text-align: right;
-            border-bottom: 2px dashed #334155;
-            padding-bottom: 30px;
-            margin-bottom: 30px;
+        html[dir="ltr"] .lang-toggle {
+            left: auto;
+            right: 16px;
         }
-        .section-en {
-            direction: ltr;
-            text-align: left;
+        .lang-toggle:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #10b981;
         }
-        h1 {
-            color: #38bdf8;
-            border-bottom: 2px solid #334155;
-            padding-bottom: 12px;
-            font-size: 22px;
+        .header {
+            text-align: center;
+            padding-top: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 16px;
+        }
+        .main-title {
+            color: #10b981;
+            font-size: 21px;
             font-weight: 800;
+            margin: 0 0 6px 0;
+        }
+        .subtitle {
+            color: #94a3b8;
+            font-size: 12.5px;
+            margin: 0;
+        }
+        .highlight-box {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 14px;
+            padding: 16px;
+            margin: 20px 0;
+            font-size: 13.5px;
+            color: #e2e8f0;
+        }
+        html[dir="rtl"] .highlight-box {
+            border-right: 4px solid #10b981;
+        }
+        html[dir="ltr"] .highlight-box {
+            border-left: 4px solid #10b981;
         }
         h2 {
             color: #38bdf8;
-            font-size: 18px;
-            margin-top: 24px;
+            font-size: 15.5px;
+            font-weight: 700;
+            margin-top: 22px;
+            margin-bottom: 8px;
         }
         p {
-            margin-bottom: 16px;
-            font-size: 15px;
+            font-size: 14px;
             color: #cbd5e1;
+            margin-top: 0;
+            margin-bottom: 14px;
         }
-        .highlight {
-            background-color: rgba(3, 105, 161, 0.15);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-right: 4px solid #38bdf8;
-            padding: 14px 18px;
-            border-radius: 8px;
-            margin: 20px 0;
-            color: #e2e8f0;
-        }
-        .section-en .highlight {
-            border-right: 1px solid rgba(56, 189, 248, 0.3);
-            border-left: 4px solid #38bdf8;
-        }
-        footer {
-            margin-top: 30px;
+        .footer {
+            text-align: center;
+            margin-top: 28px;
+            padding-top: 16px;
+            border-top: 1px solid #334155;
             font-size: 13px;
             color: #64748b;
-            text-align: center;
-            border-top: 1px solid #334155;
-            padding-top: 16px;
+        }
+        .author-name {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .back-btn:hover {
+            color: #10b981;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Arabic Section -->
-        <div class="section-ar">
-            <h1>سياسة الخصوصية - حاسبة الألواح الشمسية</h1>
-            <p>تاريخ آخر تحديث: 5 سبتمبر 2026</p>
-            <p>يحترم تطبيق <strong>حاسبة الألواح الشمسية</strong> خصوصية مستخدميه بشكل كامل.</p>
 
-            <div class="highlight">
-                <strong>نظرة عامة على البيانات:</strong> هذا التطبيق لا يقوم بجمع، أو تخزين، أو مشاركة، أو معالجة أي بيانات شخصية، أو معلومات خاصة بالمستخدم بأي شكل من الأشكال.
-            </div>
+<div class="container">
+    <button class="lang-toggle" onclick="toggleLanguage()" id="langBtn">EN <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
 
-            <h2>1. جمع البيانات والحسابات</h2>
-            <p>جميع الحسابات والعمليات المتعلقة بحساب عدد الألواح الشمسية والقدرة المطلوبة لشحن البطاريات تتم محلياً بالكامل على جهازك دون الحاجة للاتصال بخوادم خارجية.</p>
-
-            <h2>2. الأذونات</h2>
-            <p>لا يطلب التطبيق أي أذونات وصول حساسة داخل نظام أندرويد.</p>
-
-            <h2>3. التواصل معنا</h2>
-            <p>لأي استفسارات حول سياسة الخصوصية، يمكنك التواصل عبر البريد الإلكتروني الخاص بالمطور.</p>
-        </div>
-
-        <!-- English Section -->
-        <div class="section-en">
-            <h1>Privacy Policy - Solar Panels Calculator</h1>
-            <p>Last updated: September 5, 2026</p>
-            <p>The <strong>Solar Panels Calculator</strong> application fully respects user privacy.</p>
-
-            <div class="highlight">
-                <strong>Data Overview:</strong> This application does not collect, store, share, or process any personal data or user-identifiable information in any way.
-            </div>
-
-            <h2>1. Data Collection & Calculations</h2>
-            <p>All calculations regarding solar panel requirements and required charging wattage are processed locally on your device without communicating with external servers.</p>
-
-            <h2>2. Permissions</h2>
-            <p>The application does not request any sensitive permissions on Android.</p>
-
-            <h2>3. Contact Us</h2>
-            <p>If you have any questions regarding this Privacy Policy, you can contact us via the developer's email.</p>
-        </div>
-
-        <footer>
-            &copy; 2026 All Rights Reserved / جميع الحقوق محفوظة - Solar Panels Calculator
-        </footer>
+    <div class="header">
+        <h1 class="main-title" data-i18n="title">سياسة الخصوصية</h1>
+        <p class="subtitle" data-i18n="subtitle">تاريخ آخر تحديث: 8 سبتمبر 2026</p>
     </div>
+
+    <p data-i18n="intro">إن حماية خصوصيتك أمر أساسي بالنسبة لنا. تم تصميم تطبيق <strong>حاسبة الألواح الشمسية</strong> ليعمل كأداة هندسية آمنة ومستقلة بالكامل لتحديد حسابات وتوزيع المصفوفات الشمسية.</p>
+
+    <div class="highlight-box" data-i18n="overview">
+        <strong>نظرة عامة على البيانات:</strong> هذا التطبيق لا يقوم بجمع، أو تخزين، أو مشاركة، أو معالجة أي بيانات شخصية، أو معلومات معرّفة بالمستخدم بأي شكل من الأشكال.
+    </div>
+
+    <h2><span data-i18n="sec1Title">1. جمع البيانات واستخدامها</span></h2>
+    <p data-i18n="sec1Text">جميع الحسابات والعمليات المتعلقة بقدرات الألواح الشمسية والربط الكهربائي تتم محلياً وفي الوقت الفعلي داخل جهازك فقط. لا يتطلب التطبيق أي تسجيل دخول، ولا يتصل بأي سيرفرات خارجية لمعالجة البيانات.</p>
+
+    <h2><span data-i18n="sec2Title">2. الأذونات</span></h2>
+    <p data-i18n="sec2Text">لا يطلب التطبيق أي أذونات وصول حساسة داخل نظام أندرويد أو المتصفح.</p>
+
+    <h2><span data-i18n="sec3Title">3. التواصل معنا</span></h2>
+    <p data-i18n="sec3Text">إذا كان لديك أي استفسارات حول سياسة الخصوصية، يمكنك التواصل معنا عبر وسائل التواصل المتاحة داخل التطبيق.</p>
+
+    <div style="text-align: center;">
+        <a href="index.html" onclick="if(window.history.length > 1 && document.referrer){ window.history.back(); return false; }" class="back-btn" data-i18n="backBtn">← العودة للتطبيق</a>
+    </div>
+
+    <div class="footer">
+        <p style="margin:0;" data-i18n="copyright">تصميم وتطوير <span class="author-name">مازن العوذلي</span> &copy; 2026</p>
+    </div>
+</div>
+
+<script>
+    const dict = {
+        ar: {
+            pageTitle: "سياسة الخصوصية - حاسبة الألواح الشمسية",
+            title: "سياسة الخصوصية",
+            subtitle: "تاريخ آخر تحديث: 8 سبتمبر 2026",
+            intro: "إن حماية خصوصيتك أمر أساسي بالنسبة لنا. تم تصميم تطبيق <strong>حاسبة الألواح الشمسية</strong> ليعمل كأداة هندسية آمنة ومستقلة بالكامل لتحديد حسابات وتوزيع المصفوفات الشمسية.",
+            overview: "<strong>نظرة عامة على البيانات:</strong> هذا التطبيق لا يقوم بجمع، أو تخزين، أو مشاركة، أو معالجة أي بيانات شخصية، أو معلومات معرّفة بالمستخدم بأي شكل من الأشكال.",
+            sec1Title: "1. جمع البيانات واستخدامها",
+            sec1Text: "جميع الحسابات والعمليات المتعلقة بقدرات الألواح الشمسية والربط الكهربائي تتم محلياً وفي الوقت الفعلي داخل جهازك فقط. لا يتطلب التطبيق أي تسجيل دخول، ولا يتصل بأي سيرفرات خارجية لمعالجة البيانات.",
+            sec2Title: "2. الأذونات",
+            sec2Text: "لا يطلب التطبيق أي أذونات وصول حساسة داخل نظام أندرويد أو المتصفح.",
+            sec3Title: "3. التواصل معنا",
+            sec3Text: "إذا كان لديك أي استفسارات حول سياسة الخصوصية، يمكنك التواصل معنا عبر وسائل التواصل المتاحة داخل التطبيق.",
+            backBtn: "← العودة للتطبيق",
+            copyright: 'تصميم وتطوير <span class="author-name">مازن العوذلي</span> &copy; 2026'
+        },
+        en: {
+            pageTitle: "Privacy Policy - Solar Panel Calculator",
+            title: "Privacy Policy",
+            subtitle: "Last updated: September 8, 2026",
+            intro: "Protecting your privacy is fundamental to us. The <strong>Solar Panel Calculator</strong> app is designed to function as a safe, standalone engineering tool for sizing solar arrays.",
+            overview: "<strong>Data Overview:</strong> This application does not collect, store, share, or process any personal data or user-identifiable information in any way.",
+            sec1Title: "1. Data Collection & Usage",
+            sec1Text: "All calculations related to panel array configurations and electrical parameters are processed locally on your device in real-time. The application requires no user registration and does not communicate with external servers.",
+            sec2Title: "2. Permissions",
+            sec2Text: "The application does not request any sensitive permissions on Android or the browser.",
+            sec3Title: "3. Contact Us",
+            sec3Text: "If you have any questions regarding this Privacy Policy, you can contact us through the social channels available in the app.",
+            backBtn: "← Back to Calculator",
+            copyright: 'Designed & Developed by <span class="author-name">Mazen Al-Awdhali</span> &copy; 2026'
+        }
+    };
+
+    let currentLang = localStorage.getItem('panel_app_lang') || 'ar';
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'ar' ? 'en' : 'ar';
+        localStorage.setItem('panel_app_lang', currentLang);
+        applyLanguage();
+    }
+
+    function applyLanguage() {
+        const t = dict[currentLang];
+        document.documentElement.lang = currentLang;
+        document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+        document.getElementById('pageTitle').innerText = t.pageTitle;
+
+        const globeSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>';
+        document.getElementById('langBtn').innerHTML = currentLang === 'ar' ? 'EN ' + globeSvg : 'AR ' + globeSvg;
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) el.innerHTML = t[key];
+        });
+    }
+
+    applyLanguage();
+</script>
+
 </body>
 </html>
