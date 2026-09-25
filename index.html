@@ -716,21 +716,28 @@
             }
         });
 
-        // معالجة جراحية لمنع الكسور والأصفار المتقدمة (مثل 05) لعدد البطاريات
-        document.getElementById('batteryCountInput').addEventListener('input', function() {
-            let val = this.value.replace(/[^\d]/g, ''); // حظر النقطة والرموز
-            if (val.length > 1 && val.startsWith('0')) val = val.replace(/^0+/, ''); // إزالة الأصفار المتقدمة
-            this.value = val;
-            calculate();
+        // حماية المدخلات الشاملة (الأرقام المشرقية، تقييد 7 أرقام، قدرة اللوح 3 أرقام، إزالة الأصفار الزائدة)
+        ['capacityInput', 'batteryCountInput', 'panelInput', 'sunHoursInput'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) {
+                el.addEventListener('input', function() {
+                    let raw = this.value.replace(/[٠-٩]/g, d => "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(d)]);
+                    if (id === 'batteryCountInput' || id === 'panelInput') {
+                        let maxLen = (id === 'panelInput') ? 3 : 7;
+                        let val = raw.replace(/[^\d]/g, '').substring(0, maxLen);
+                        if (val.length > 1 && val.startsWith('0')) val = val.replace(/^0+/, '');
+                        this.value = val;
+                    } else {
+                        let val = raw.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').substring(0, 7);
+                        if (val.startsWith('.')) val = '0' + val;
+                        if (val.length > 1 && val.startsWith('0') && !val.startsWith('0.')) val = val.replace(/^0+/, '');
+                        this.value = val;
+                    }
+                    calculate();
+                });
+            }
         });
-
-        // معالجة جراحية لمنع الكسور والأصفار المتقدمة (مثل 05) لقدرة اللوح
-        document.getElementById('panelInput').addEventListener('input', function() {
-            let val = this.value.replace(/[^\d]/g, ''); // حظر النقطة والرموز
-            if (val.length > 1 && val.startsWith('0')) val = val.replace(/^0+/, ''); // إزالة الأصفار المتقدمة
-            this.value = val;
-            calculate();
-        });
+        document.getElementById('dodValue').addEventListener('input', calculate);
 
         // --- نظام الحفظ التلقائي (Auto-Save) ---
         function saveToStorage() {
@@ -838,11 +845,6 @@
 
             saveToStorage(); // حفظ البيانات تلقائياً مع كل عملية حسابية
         }
-
-        // ربط أحداث الإدخال لبعض الحقول
-        document.getElementById('capacityInput').addEventListener('input', calculate);
-        document.getElementById('sunHoursInput').addEventListener('input', calculate);
-        document.getElementById('dodValue').addEventListener('input', calculate);
 
         // الاستماع لتغير حالة الاتصال وتحديث العداد تلقائياً
         window.addEventListener('online', updateVisitorCount);
