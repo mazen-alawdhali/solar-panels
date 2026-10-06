@@ -138,9 +138,7 @@
     <!-- قسم إخلاء المسؤولية -->
     <div class="content-section">
         <div class="section-title" id="sec3Title">⚠️ تنبيه وإخلاء مسؤولية قانونية</div>
-        <div class="text-block" id="sec3Text">
-            تعتبر مخرجات هذه الحاسبة نموذج محاكاة تقديري للمساعدة في التخطيط الأولي للمنظومة الشمسية. للحصول على أداء ميداني مضمون وتفادي فواقد التركيب، يُنصح دائماً بمراجعة التقييم النهائي مع مهندس أو فني طاقة شمسية مختص.
-        </div>
+        <div class="text-block" id="sec3Text">💡 <strong>تنبيه هام:</strong> هذه النتائج <strong>تقديرية</strong> لمساعدة الفنيين والمستخدمين في التخطيط المبدئي لشحن البطاريات فقط. لتصميم وتغذية الأحمال المنزلية يمكنك استخدام <a href="https://solar-calculator-pro.vercel.app" target="_blank" style="color: #38bdf8; text-decoration: underline;">حاسبة الطاقة الشمسية الذكية</a>. مع ضرورة استشارة مهندس أو فني متخصص للتركيب الميداني.</div>
     </div>
 
     <!-- بطاقة المطور -->
@@ -182,7 +180,7 @@ const i18n = {
             '<strong>واجهة ثنائية اللغة (عربي / إنجليزي):</strong> دعم كامل ومباشر للغتين العربية والإنجليزية لتوفير تجربة استخدام مرنة واحترافية للمهندسين والفنيين.'
         ],
         sec3Title: '⚠️ تنبيه وإخلاء مسؤولية قانونية',
-        sec3Text: 'تعتبر مخرجات هذه الحاسبة نموذج محاكاة تقديري للمساعدة في التخطيط الأولي للمنظومة الشمسية. للحصول على أداء ميداني مضمون وتفادي فواقد التركيب، يُنصح دائماً بمراجعة التقييم النهائي مع مهندس أو فني طاقة شمسية مختص.',
+        sec3Text: '💡 <strong>تنبيه هام:</strong> هذه النتائج <strong>تقديرية</strong> لمساعدة الفنيين والمستخدمين في التخطيط المبدئي لشحن البطاريات فقط. لتصميم وتغذية الأحمال المنزلية يمكنك استخدام <a href="https://solar-calculator-pro.vercel.app" target="_blank" style="color: #38bdf8; text-decoration: underline;">حاسبة الطاقة الشمسية الذكية</a>. مع ضرورة استشارة مهندس أو فني متخصص للتركيب الميداني.',
         sec4Title: '👨‍💻 التطوير وحقوق الملكية',
         devLabel: 'تم التصميم والتطوير بواسطة:',
         devName: 'م. مازن العوذلي',
@@ -206,7 +204,7 @@ const i18n = {
             '<strong>Bilingual Interface (Arabic / English):</strong> Direct support for Arabic and English providing a flexible, professional user experience for engineers and technicians.'
         ],
         sec3Title: '⚠️ Engineering Disclaimer',
-        sec3Text: 'The outputs of this calculator serve as an estimated simulation model for initial planning. Users are advised to review final designs with a certified solar engineer.',
+        sec3Text: '💡 <strong>Important Note:</strong> These results are <strong>estimated</strong> to assist technicians and users in initial battery charging planning only. For designing and powering home loads, you can use the <a href="https://solar-calculator-pro.vercel.app" target="_blank" style="color: #38bdf8; text-decoration: underline;">Smart Solar Calculator</a>. Always consult a qualified engineer or specialist for field installation.',
         sec4Title: '👨‍💻 Developer & Copyright',
         devLabel: 'Designed & Developed by:',
         devName: 'Eng. Mazen Al-Awdhali',
@@ -243,7 +241,7 @@ function applyLanguage() {
     });
 
     document.getElementById('sec3Title').innerText = data.sec3Title;
-    document.getElementById('sec3Text').innerText = data.sec3Text;
+    document.getElementById('sec3Text').innerHTML = data.sec3Text;
     document.getElementById('sec4Title').innerText = data.sec4Title;
     document.getElementById('devLabel').innerText = data.devLabel;
     document.querySelector('.dev-name').innerText = data.devName;
