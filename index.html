@@ -555,6 +555,15 @@
             }
         };
 
+        // التقاط اللغة الممررة عبر URL من المنصة الرئيسية وحفظها تلقائياً
+        (function syncUrlLanguage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            if (langParam === 'en' || langParam === 'ar') {
+                localStorage.setItem('solar_panel_lang', langParam);
+            }
+        })();
+
         let currentLang = localStorage.getItem('solar_panel_lang') || 'ar';
 
         function toggleLanguage() {
