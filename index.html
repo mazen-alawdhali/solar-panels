@@ -360,7 +360,7 @@
         <div class="header">
             <div class="title-box">
                 <h1 data-i18n="appTitle">حاسبة الألواح الشمسية ⚡</h1>
-                <p class="subtitle" data-i18n="appSubtitle">حساب دقيق لعدد الألواح المطلوبة لشحن البطاريات فقط</p>
+                <p class="subtitle" data-i18n="appSubtitle">حساب دقيق لعدد الألواح المطلوبة لشحن البطاريات</p>
             </div>
         </div>
 
@@ -446,7 +446,7 @@
                 </div>
 
                 <div class="input-group">
-                    <label data-i18n="dodLabel">نسبة تفريغ البطارية (DoD):</label>
+                    <label data-i18n="dodLabel" style="cursor: pointer;" onclick="openDodModal()">نسبة تفريغ البطارية (DoD): 💡</label>
                     <input type="text" inputmode="numeric" id="dodValue" placeholder="DoD 100%" value="DoD 100%" lang="en" onfocus="formatDodInput(this, true)" onblur="formatDodInput(this, false)">
                 </div>
             </div>
@@ -501,6 +501,30 @@
         </footer>
     </div>
 
+    <!-- نافذة دليل نسبة التفريغ (DoD) -->
+    <div id="dodGuideModal" class="modal-overlay" onclick="if(event.target === this) closeDodModal()">
+        <div class="modal-box" style="text-align: start;">
+            <span class="modal-icon" style="text-align: center;">🔋</span>
+            <h3 data-i18n="dodGuideTitle" style="text-align: center; margin-bottom: 20px;">دليل نسبة التفريغ (DoD)</h3>
+            
+            <p data-i18n="dodGuideLithiumTitle" style="margin-bottom: 8px; font-size: 13.5px; font-weight: 700; color: #ffffff; text-align: start;">نسبة التفريغ الموصى بها لبطارية الليثيوم :</p>
+            <div data-i18n="dodGuideLithiumVals" style="margin-bottom: 16px; font-size: 13.5px; line-height: 1.8; color: #e2e8f0; padding-inline-start: 8px; text-align: start;">
+                🔹 80% | 90% | 95% | 100%
+            </div>
+
+            <p data-i18n="dodGuideGelTitle" style="margin-bottom: 8px; font-size: 13.5px; font-weight: 700; color: #ffffff; text-align: start;">نسبة التفريغ لبطارية الجل والاسيد ديب سايكل:</p>
+            <div data-i18n="dodGuideGelVals" style="margin-bottom: 20px; font-size: 13.5px; line-height: 1.8; color: #e2e8f0; padding-inline-start: 8px; text-align: start;">
+                🔹 50%
+            </div>
+
+            <p data-i18n="dodGuideNote" style="font-size: 12px; color: #94a3b8; text-align: start; margin-top: 20px; line-height: 1.6;">💡ملاحظة: كلما زادت نسبة التفريغ (DoD) زادت الطاقة المطلوبة من الألواح لتعويضها، والعكس صحيح.</p>
+            
+            <div class="modal-actions" style="margin-top: 24px;">
+                <button style="background: #10b981; color: white;" onclick="closeDodModal()" data-i18n="dodGuideBtn">موافق</button>
+            </div>
+        </div>
+    </div>
+
     <!-- نافذة تأكيد التصفير (المودال) -->
     <div id="confirmModal" class="modal-overlay">
         <div class="modal-box">
@@ -548,7 +572,14 @@
                 sysVoltage: "جهد المنظومة (V):", v12: "12 فولت", v24: "24 فولت", v48: "48 فولت", 
                 panelPower: "قدرة اللوح الواحد (W):", sunHours: "ساعات ذروة الشمس:", 
                 regionEfficiency: "منطقة الاستخدام (نسبة الكفاءة):", regionSanaa: "مناطق معتدلة (85%)", regionAden: "مناطق حارة (75%)",
-                dodLabel: "نسبة تفريغ البطارية (DoD):",
+                dodLabel: "نسبة تفريغ البطارية (DoD): 💡",
+                dodGuideTitle: "دليل نسبة التفريغ (DoD)",
+                dodGuideLithiumTitle: "نسبة التفريغ الموصى بها لبطارية الليثيوم :",
+                dodGuideLithiumVals: "🔹 80% | 90% | 95% | 100%",
+                dodGuideGelTitle: "نسبة التفريغ لبطارية الجل والاسيد ديب سايكل:",
+                dodGuideGelVals: "🔹 50%",
+                dodGuideNote: "💡ملاحظة: كلما زادت نسبة التفريغ (DoD) زادت الطاقة المطلوبة من الألواح لتعويضها، والعكس صحيح.",
+                dodGuideBtn: "موافق",
                 warn12V: "⚠️ <b>ملاحظة هندسية:</b> السعة الحالية تزيد عن {LIMIT} على نظام 12V. لتفادي تيار الشحن العالي وسخونة الكابلات وفقد التوازن، يُوصى بشدة بترقية المنظومة إلى 24V أو 48V.",
                 warn24V: "⚠️ <b>ملاحظة هندسية:</b> السعة الحالية تزيد عن {LIMIT} على نظام 24V. للحصول على كفاءة أعلى وأمان تام للتيارات العالية، يُفضل ترقية المنظومة إلى 48V.",
                 resultLabel: "عدد الألواح المطلوبة للشحن", 
@@ -573,7 +604,14 @@
                 sysVoltage: "System Voltage (V):", v12: "12 Volts", v24: "24 Volts", v48: "48 Volts", 
                 panelPower: "Single Panel Power (W):", sunHours: "Peak Sun Hours:", 
                 regionEfficiency: "Geographic Region (Efficiency):", regionSanaa: "Mild Regions (85%)", regionAden: "Hot Regions (75%)",
-                dodLabel: "Battery DoD Rate:",
+                dodLabel: "Battery DoD Rate: 💡",
+                dodGuideTitle: "Depth of Discharge (DoD) Guide",
+                dodGuideLithiumTitle: "Recommended DoD for Lithium batteries:",
+                dodGuideLithiumVals: "🔹 80% | 90% | 95% | 100%",
+                dodGuideGelTitle: "Recommended DoD for Gel & Acid Deep Cycle:",
+                dodGuideGelVals: "🔹 50%",
+                dodGuideNote: "💡 Note: A higher DoD requires more solar panels to recharge, and vice versa.",
+                dodGuideBtn: "OK",
                 warn12V: "⚠️ <b>Engineering Note:</b> Capacity exceeds {LIMIT} on a 12V system. To avoid high currents, cable overheating, and imbalance, upgrading to 24V or 48V is strongly recommended.",
                 warn24V: "⚠️ <b>Engineering Note:</b> Capacity exceeds {LIMIT} on a 24V system. For higher efficiency and safety regarding high currents, upgrading to 48V is recommended.",
                 resultLabel: "Required Panels for Charging", 
@@ -682,9 +720,12 @@
             }
         }
 
-        // --- دوال نافذة التأكيد (المودال) ---
+        // --- دوال النوافذ المنبثقة (المودال) ---
         function openModal() { document.getElementById('confirmModal').classList.add('active'); }
         function closeModal() { document.getElementById('confirmModal').classList.remove('active'); }
+        
+        function openDodModal() { document.getElementById('dodGuideModal').classList.add('active'); }
+        function closeDodModal() { document.getElementById('dodGuideModal').classList.remove('active'); }
         
         function executeReset() {
             document.getElementById('capacityInput').value = 0;
